@@ -29,51 +29,35 @@ fn main()->!{
 
     let mut itm = cp.ITM;
 
-    let mut gpioa = dp.GPIOA.split(&mut rcc.ahb);
-    let mut dth_data_vec:Vec<u8, consts::U32> = Vec::new();
-    iprintln!(&mut itm.stim[0],"wait for dth ready");
     delay.delay_ms(1000_u32);
-    let mut pa3 = gpioa.pa3.into_open_drain_output(&mut gpioa.moder,&mut gpioa.otyper);
-    pa3.internal_pull_up(&mut gpioa.pupdr,true);
-    pa3.set_low();
-    delay.delay_ms(18_u32);
-    pa3.set_high();
-    delay.delay_us(20_u32);
-    iprintln!(&mut itm.stim[0],"waitng to response");
-    while set_bit(){}
-    iprintln!(&mut itm.stim[0],"bit is clear");
-    while clear_bit(){}
-    iprintln!(&mut itm.stim[0],"bit is set");
-    pa3.into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr);
-    while set_bit(){}
-    iprintln!(&mut itm.stim[0],"bit is clear and for loop begin");
-    for i in 0..41{
-        iprintln!(&mut itm.stim[0],"bit is set");
-        while clear_bit(){}      
+    unsafe{
+        let r1 = &*RCC::ptr();
+        let gpioa = &*GPIOA::ptr();
+        let mut dth_data_vec:Vec<u8, consts::U32> = Vec::new();
+        r1.ahbenr.modify(|_, w| w.iopaen().set_bit());
+        gpioa.moder.modify(|_,w|w.moder3().output());
+        gpioa.otyper.modify(|_,w|w.ot3().set_bit());
+        gpioa.pupdr.write(|w| w.pupdr3().bits(0x01));
+
+        gpioa.bsrr.write(|w| w.bs3().clear_bit());
+        delay.delay_ms(18_u32);
+        gpioa.bsrr.write(|w| w.bs3().set_bit());
+        delay.delay_us(20_u32);
+        while gpioa.idr.read().idr3().bit_is_set(){}
         iprintln!(&mut itm.stim[0],"bit is clear");
-        let instance = mono_time.now();
-        while set_bit(){}
-        let elapsed = instance.elapsed();
-        let time = elapsed as f32 / mono_time.frequency().0 as f32 * 1e6;
-        if time > 30.0{
-            dth_data_vec.push(1).is_err();
-        }else{
-            dth_data_vec.push(0).is_err();
+        while gpioa.idr.read().idr3().bit_is_clear(){}
+        for i in 0..41{
+            delay.delay_us(35_u32);
+            if gpioa.idr.read().idr3().bit_is_set(){
+                dth_data_vec.push(1).is_err();
+            }else{
+                dth_data_vec.push(0).is_err();
+            }
+            gpioa.bsrr.write(|w| w.bs3().clear_bit());
         }
-    }
     iprintln!(&mut itm.stim[0],"vector Print{:?}",dth_data_vec);
 
+    }
+
     loop{}
-}
-fn set_bit()->bool{
-    unsafe{
-        let gpioa_pin = &*GPIOA::ptr();
-        gpioa_pin.idr.read().idr3().bit_is_set()
-    }
-}
-fn clear_bit()->bool{
-    unsafe{
-        let gpioa_pin = &*GPIOA::ptr();
-        gpioa_pin.idr.read().idr3().bit_is_clear()
-    }
 }

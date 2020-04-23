@@ -54,3 +54,107 @@ fn main()->!{
 
     loop{}
 }
+
+while set_bit(){}
+iprintln!(&mut itm.stim[0],"bit is clear");
+while clear_bit(){}
+iprintln!(&mut itm.stim[0],"bit is set");
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// while set_bit(){}
+// while clear_bit(){}
+// count+=1;
+// iprintln!(&mut itm.stim[0],"{}",count);
+// for i in 0..41{
+//     iprintln!(&mut itm.stim[0],"bit is set");
+//     while clear_bit(){}      
+//     iprintln!(&mut itm.stim[0],"bit is clear");
+//     let instance = mono_time.now();
+//     while set_bit(){}
+//     let elapsed = instance.elapsed();
+//     let time = elapsed as f32 / mono_time.frequency().0 as f32 * 1e6;
+//     if time > 30.0{
+//         dth_data_vec.push(1).is_err();
+//     }else{
+//         dth_data_vec.push(0).is_err();
+//     }
+// }
