@@ -21,18 +21,18 @@ fn main()->!{
 
     let mut delay = Delay::new(cp.SYST, clocks);
     let mut itm = cp.ITM;
-    delay.delay_ms(1500_u32);
+    delay.delay_ms(1000_u32);
     iprintln!(&mut itm.stim[0],"waiting for");
     let mut gpioa = dp.GPIOA.split(& mut rcc.ahb);
     let mut pa3 = gpioa.pa3.into_open_drain_output(&mut gpioa.moder,&mut gpioa.otyper);
     pa3.internal_pull_up(&mut gpioa.pupdr,true);
-    pa3.set_high();
-    delay.delay_us(40_u32);
+    // pa3.set_high();
+    // delay.delay_us(40_u32);
     pa3.set_low();
-    delay.delay_us(20000_u32);
+    delay.delay_ms(18u32);
     pa3.set_high();
     pa3.into_pull_up_input(&mut gpioa.moder,&mut gpioa.pupdr);
-
+    delay.delay_us(200u32);
     let mut hum_int = response(&mut delay);
     let mut hum_float = response(&mut delay);
     let mut temp_int = response(&mut delay);
@@ -44,9 +44,11 @@ fn main()->!{
     iprintln!(&mut itm.stim[0],"check sum {:?}",convert_bit(&mut check_sum));
 
 
-    // iprintln!(&mut itm.stim[0],"hum data  {:?}.{:?}%", hum_int,hum_float);
-    // iprintln!(&mut itm.stim[0],"temp data {:?}.{:?}",temp_int, temp_float);
-    // iprintln!(&mut itm.stim[0],"check sum {:?}",check_sum);
+    iprintln!(&mut itm.stim[0],"hum data  {:?}", hum_int);
+    iprintln!(&mut itm.stim[0],"hum data  {:?}", hum_float);
+    iprintln!(&mut itm.stim[0],"temp data {:?}",temp_int);
+    iprintln!(&mut itm.stim[0],"temp data {:?}",temp_float);
+    iprintln!(&mut itm.stim[0],"check sum {:?}",check_sum);
     loop{}
 }
 
@@ -67,14 +69,14 @@ fn response(delay:&mut Delay)->[u8;8]{
     let delay = delay;
     for byte in data.iter_mut(){
         while clear_bit(){}
-        delay.delay_us(35_u32);
+        delay.delay_us(25u32);
         if set_bit(){
             *byte = 1
         }else{
             *byte = 0;
         }
          while set_bit(){}
-         //delay.delay_us(20_u32);
+        //  delay.delay_us(10_u32);
     }
     data
 }
