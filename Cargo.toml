@@ -1,0 +1,23 @@
+
+[package]
+authors = ["Jorge Aparicio <jorge@japaric.io>"]
+edition = "2018"
+name = "usart"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.5.6"
+cortex-m-rt = "0.6.3"
+panic-itm = "0.4.0"
+cortex-m-semihosting = "0.3.3"
+
+
+
+[dependencies.heapless]
+default-features = false
+version = "0.3.7"
+# dht-sensor = {path = "dht-sensor-master"}
+
+[dependencies.f3]
+features = ["rt"]
+version = "0.6.1"
