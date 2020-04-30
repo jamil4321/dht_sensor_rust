@@ -6,7 +6,7 @@ extern crate panic_itm; // panic handler
 use cortex_m::{iprint, iprintln, peripheral::ITM};
 use cortex_m_rt::entry;
 use f3::hal::{time::MonoTimer,delay::Delay};
-use f3::hal::{prelude::*,stm32f30x::{self,GPIOA,RCC}};
+use f3::hal::{prelude::*,stm32f30x::{self,GPIOA}};
 
 
 #[entry]
@@ -21,16 +21,36 @@ fn main()->!{
 
     let mut delay = Delay::new(cp.SYST, clocks);
     let mut itm = cp.ITM;
+    delay.delay_ms(1000_u32);
+    iprintln!(&mut itm.stim[0],"waiting for");
     let mut gpioa = dp.GPIOA.split(& mut rcc.ahb);
     let mut pa3 = gpioa.pa3.into_open_drain_output(&mut gpioa.moder,&mut gpioa.otyper);
     pa3.internal_pull_up(&mut gpioa.pupdr,true);
+    // pa3.set_high();
+    // delay.delay_us(40_u32);
+    pa3.set_low();
+    delay.delay_ms(18u32);
+    pa3.set_high();
+    pa3.into_pull_up_input(&mut gpioa.moder,&mut gpioa.pupdr);
+    delay.delay_us(200u32);
+    let mut hum_int = response(&mut delay);
+    let mut hum_float = response(&mut delay);
+    let mut temp_int = response(&mut delay);
+    let mut temp_float = response(&mut delay);
+    let mut check_sum = response(&mut delay);
 
-    loop{
-    iprintln!(&mut itm.stim[0],"Wait for data 2 Sec");
-    delay.delay_ms(2000_u32);
-    // dht11(&mut delay, &mut pa3,&mut itm);
-    iprintln!(&mut itm.stim[0],"Wait for data");
-    dht11(&mut delay, &mut pa3,&mut itm);
+    iprintln!(&mut itm.stim[0],"hum data  {:?}.{:?}%",convert_bit(&mut hum_int),convert_bit(&mut hum_float));
+    iprintln!(&mut itm.stim[0],"temp data {:?}.{:?}",convert_bit(&mut temp_int),convert_bit(&mut temp_float));
+    iprintln!(&mut itm.stim[0],"check sum {:?}",convert_bit(&mut check_sum));
+
+
+    iprintln!(&mut itm.stim[0],"hum data  {:?}", hum_int);
+    iprintln!(&mut itm.stim[0],"hum data  {:?}", hum_float);
+    iprintln!(&mut itm.stim[0],"temp data {:?}",temp_int);
+    iprintln!(&mut itm.stim[0],"temp data {:?}",temp_float);
+    iprintln!(&mut itm.stim[0],"check sum {:?}",check_sum);
+    loop{}
+}
 
     }
 }
@@ -83,17 +103,4 @@ fn convert_bit(data:&mut[u8;8]) -> u8{
         int = int + arr[i]*vec[i]
     }
     int
-}
-
-fn set_bit()->bool{
-    unsafe{
-        let gpioa_pin = &*GPIOA::ptr();
-        gpioa_pin.idr.read().idr3().bit_is_set()
-    }
-}
-fn clear_bit()->bool{
-    unsafe{
-        let gpioa_pin = &*GPIOA::ptr();
-        gpioa_pin.idr.read().idr3().bit_is_clear()
-    }
 }
