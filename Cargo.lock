@@ -98,7 +98,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "dth_sensor_rust"
+name = "dht_sensor_rust"
 version = "0.1.0"
 dependencies = [
  "cortex-m 0.5.10",

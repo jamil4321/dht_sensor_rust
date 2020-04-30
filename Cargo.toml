@@ -2,7 +2,7 @@
 [package]
 authors = ["Jamil Ahmed <jamil.ahmed.ja28@gmail.com>"]
 edition = "2018"
-name = "dth_sensor_rust"
+name = "dht_sensor_rust"
 version = "0.1.0"
 
 [dependencies]
