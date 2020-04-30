@@ -3,9 +3,8 @@
 
 #[allow(unused_extern_crates)] // NOTE(allow) bug rust-lang/rust53964
 extern crate panic_itm; // panic handler
-use cortex_m::{iprint, iprintln, peripheral::ITM};
 use f3::hal::delay::Delay;
-use f3::hal::{prelude::*,stm32f30x::{self,GPIOA}};
+use f3::hal::{prelude::*,stm32f30x::GPIOA};
 
 
 pub fn dht11 (delay:&mut Delay,pin: &mut f3::hal::gpio::gpioa::PA3<f3::hal::gpio::Output<f3::hal::gpio::OpenDrain>>)  
@@ -52,7 +51,6 @@ fn response(delay:&mut Delay)->[u8;8]{
             *byte = 0;
         }
          while set_bit(){}
-        //  delay.delay_us(10_u32);
     }
     data
 }
