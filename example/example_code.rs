@@ -36,7 +36,7 @@ fn main()->!{
     loop{
         // wait for 2sec make sure Dht11 is ready
         delay.delay_ms(2000_u32);
-        iprintln!(&mut itm.stim[0],"wait for responce");
+        iprintln!(&mut itm.stim[0],"waiting for responce");
         
         // Call function dht11 and it will return tuple of 4 value  
         let (hum,_, temp,_) = dht11(&mut delay, &mut pa3);
